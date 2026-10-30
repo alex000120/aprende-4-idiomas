@@ -3,8 +3,6 @@ import { categories, lessonCards, phrases, vocabulary } from './data/lessons';
 
 type LanguageCode = 'es' | 'en' | 'zh' | 'ja';
 
-type Phrase = (typeof phrases)[number];
-
 type PersistedProgress = {
   xp: number;
   streak: number;
@@ -12,13 +10,16 @@ type PersistedProgress = {
   lastDay: string;
 };
 
-const STORAGE_KEY = 'linguamix-progress-v2';
+const STORAGE_KEY = 'linguamix-progress-v3';
+
 const languageMeta: Record<LanguageCode, { label: string; accent: string; flag: string }> = {
   es: { label: 'Español', accent: 'es-ES', flag: '🇪🇸' },
   en: { label: 'English', accent: 'en-US', flag: '🇺🇸' },
   zh: { label: '中文', accent: 'zh-CN', flag: '🇨🇳' },
   ja: { label: '日本語', accent: 'ja-JP', flag: '🇯🇵' }
 };
+
+const shuffle = <T,>(items: T[]) => [...items].sort(() => Math.random() - 0.5);
 
 const readProgress = (): PersistedProgress => {
   const saved = localStorage.getItem(STORAGE_KEY);
@@ -46,29 +47,26 @@ const speakText = (language: LanguageCode, text: string) => {
   if (!('speechSynthesis' in window)) return;
 
   window.speechSynthesis.cancel();
-
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = languageMeta[language].accent;
   utterance.rate = 0.9;
   utterance.pitch = 1;
   utterance.volume = 1;
-
   window.speechSynthesis.speak(utterance);
 };
 
-const speakSequence = (texts: Array<{ language: LanguageCode; text: string }>) => {
+const speakSequence = (items: Array<{ language: LanguageCode; text: string }>) => {
   if (!('speechSynthesis' in window)) return;
 
   window.speechSynthesis.cancel();
 
   let index = 0;
-
   const playNext = () => {
-    if (index >= texts.length) return;
+    if (index >= items.length) return;
 
-    const entry = texts[index];
-    const utterance = new SpeechSynthesisUtterance(entry.text);
-    utterance.lang = languageMeta[entry.language].accent;
+    const current = items[index];
+    const utterance = new SpeechSynthesisUtterance(current.text);
+    utterance.lang = languageMeta[current.language].accent;
     utterance.rate = 0.86;
     utterance.pitch = 1;
     utterance.volume = 1;
@@ -91,41 +89,36 @@ function App() {
   const [dailyIndex, setDailyIndex] = useState(0);
   const [progress, setProgress] = useState<PersistedProgress>(() => readProgress());
 
-  const filteredPhrases = useMemo(() => {
-    return selectedCategory === 'Todos'
-      ? phrases
-      : phrases.filter((phrase) => phrase.category === selectedCategory);
-  }, [selectedCategory]);
-
-  const currentPhrase = filteredPhrases[currentIndex % Math.max(filteredPhrases.length, 1)] ?? phrases[0];
-
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
   }, [progress]);
 
   useEffect(() => {
-    setCurrentIndex(0);
-  }, [selectedCategory]);
-
-  useEffect(() => {
-    const dayKey = todayKey();
-    if (progress.lastDay !== dayKey) {
-      const nextStreak = progress.lastDay ? progress.streak + 1 : 1;
+    const today = todayKey();
+    if (progress.lastDay !== today) {
       setProgress((prev) => ({
         ...prev,
-        streak: nextStreak,
-        lastDay: dayKey
+        streak: prev.lastDay ? prev.streak + 1 : 1,
+        lastDay: today
       }));
     }
   }, []);
 
+  const filteredPhrases = useMemo(() => {
+    if (selectedCategory === 'Todos') return phrases;
+    return phrases.filter((phrase) => phrase.category === selectedCategory);
+  }, [selectedCategory]);
+
+  const currentPhrase =
+    filteredPhrases[currentIndex % Math.max(filteredPhrases.length, 1)] ?? phrases[0];
+
   const addXp = (amount: number, id: string) => {
     setProgress((prev) => {
-      const completed = prev.completed.includes(id) ? prev.completed : [...prev.completed, id];
+      const alreadyCompleted = prev.completed.includes(id);
       return {
         ...prev,
         xp: prev.xp + amount,
-        completed
+        completed: alreadyCompleted ? prev.completed : [...prev.completed, id]
       };
     });
   };
@@ -139,40 +132,38 @@ function App() {
 
   const markAsLearned = () => {
     addXp(25, `${currentPhrase.id}-learned`);
-    setQuizResult('¡Hecho! Esa frase ya quedó en tu memoria.');
+    setQuizResult('¡Perfecto! Esa frase ya está en tu memoria.');
   };
 
   const dailyPhrase = phrases[dailyIndex % phrases.length];
 
   const quizOptions = useMemo(() => {
     const correct = currentPhrase.english;
-    const wrongs = phrases
-      .filter((phrase) => phrase.id !== currentPhrase.id)
-      .map((phrase) => phrase.english);
+    const wrongs = shuffle(
+      phrases.filter((phrase) => phrase.id !== currentPhrase.id).map((phrase) => phrase.english)
+    ).slice(0, 3);
 
-    const pool = [...new Set([...wrongs, correct])];
-    return [...pool].sort(() => Math.random() - 0.5).slice(0, 4);
+    return shuffle([correct, ...wrongs]).slice(0, 4);
   }, [currentPhrase]);
 
   const answerQuiz = (option: string) => {
     if (option === currentPhrase.english) {
-      setQuizResult('¡Correcto! +35 XP de recompensa.');
+      setQuizResult('¡Correcto! +35 XP.');
       addXp(35, `${currentPhrase.id}-quiz`);
       return;
     }
 
-    setQuizResult('Casi: escucha otra vez la frase y prueba de nuevo.');
+    setQuizResult('Muy cerca. Escucha de nuevo y prueba otra vez.');
   };
 
   const totalCompleted = progress.completed.length;
   const completionPercent = Math.min((totalCompleted / Math.max(phrases.length, 1)) * 100, 100);
-  const level = Math.floor(progress.xp / 150) + 1;
-  const streakLabel = `${progress.streak} días`;
+  const level = Math.floor(progress.xp / 200) + 1;
 
-  const languageValues = (['es', 'en', 'zh', 'ja'] as LanguageCode[]).map((code) => ({
+  const translations = (['es', 'en', 'zh', 'ja'] as LanguageCode[]).map((code) => ({
     code,
-    label: languageMeta[code].label,
     flag: languageMeta[code].flag,
+    label: languageMeta[code].label,
     value:
       code === 'es'
         ? currentPhrase.spanish
@@ -189,12 +180,12 @@ function App() {
         <div>
           <p className="eyebrow">Aprendizaje creativo</p>
           <h1>LinguaMix 4 Idiomas</h1>
-          <p className="subtitle">Español + inglés + chino + japonés, aprendiendo juntos.</p>
+          <p className="subtitle">Español, inglés, chino y japonés creciendo juntos.</p>
         </div>
 
         <div className="topbar-badges">
           <span className="badge pulse">Nivel {level}</span>
-          <span className="badge">🔥 {streakLabel}</span>
+          <span className="badge">🔥 {progress.streak} días</span>
           <span className="badge">✨ {progress.xp} XP</span>
         </div>
       </header>
@@ -216,9 +207,9 @@ function App() {
           <small>memorizado</small>
         </div>
         <div className="metric-card glow-gold">
-          <span>Logros</span>
+          <span>Frases</span>
           <strong>{totalCompleted}</strong>
-          <small>frases dominadas</small>
+          <small>dominadas</small>
         </div>
       </section>
 
@@ -230,15 +221,22 @@ function App() {
               <h2>Aprender con 4 traducciones a la vez</h2>
             </div>
             <div className="header-actions">
-              <button className="secondary-btn" onClick={() => speakSequence([
-                { language: 'es', text: currentPhrase.spanish },
-                { language: 'en', text: currentPhrase.english },
-                { language: 'zh', text: currentPhrase.chinese },
-                { language: 'ja', text: currentPhrase.japanese }
-              ])}>
+              <button
+                className="secondary-btn"
+                onClick={() =>
+                  speakSequence([
+                    { language: 'es', text: currentPhrase.spanish },
+                    { language: 'en', text: currentPhrase.english },
+                    { language: 'zh', text: currentPhrase.chinese },
+                    { language: 'ja', text: currentPhrase.japanese }
+                  ])
+                }
+              >
                 🔊 Escuchar todo
               </button>
-              <button className="primary-btn" onClick={nextPhrase}>Siguiente frase</button>
+              <button className="primary-btn" onClick={nextPhrase}>
+                Siguiente frase
+              </button>
             </div>
           </div>
 
@@ -268,7 +266,7 @@ function App() {
 
           <div className="phrase-card">
             <div className="phrase-header">
-              <span className="tag">{currentPhrase.category}</span>
+              <span className="tag">{currentPhrase.emoji} {currentPhrase.category}</span>
               <span className="level">Nivel {currentPhrase.level}</span>
             </div>
 
@@ -276,11 +274,20 @@ function App() {
             <p className="phrase-tip">{currentPhrase.tip}</p>
 
             <div className="translation-grid">
-              {languageValues.map(({ code, label, flag, value }) => (
-                <article key={code} className={focusLanguage === code ? 'translation-box active' : 'translation-box'}>
+              {translations.map(({ code, label, flag, value }) => (
+                <article
+                  key={code}
+                  className={focusLanguage === code ? 'translation-box active' : 'translation-box'}
+                >
                   <div className="translation-top">
-                    <span className="language-name">{flag} {label}</span>
-                    <button className="listen-btn" onClick={() => speakText(code, value)} aria-label={`Escuchar ${label}`}>
+                    <span className="language-name">
+                      {flag} {label}
+                    </span>
+                    <button
+                      className="listen-btn"
+                      onClick={() => speakText(code, value)}
+                      aria-label={`Escuchar ${label}`}
+                    >
                       🔊
                     </button>
                   </div>
@@ -343,7 +350,7 @@ function App() {
 
           <div className="daily-card">
             <p className="eyebrow">Reto diario</p>
-            <h3>{dailyPhrase.spanish}</h3>
+            <h3>{dailyPhrase.emoji} {dailyPhrase.spanish}</h3>
             <p>{dailyPhrase.english}</p>
             <button
               className="secondary-btn"
@@ -359,7 +366,7 @@ function App() {
           <div className="achievement-panel">
             <p className="eyebrow">Logros</p>
             <ul>
-              <li>🏆 Primeros 100 XP</li>
+              <li>🏆 Primeros 200 XP</li>
               <li>🔥 Racha de 3 días</li>
               <li>🌟 10 frases aprendidas</li>
             </ul>
