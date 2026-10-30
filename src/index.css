@@ -1,683 +1,563 @@
-export const categories = [
-  'Saludo',
-  'Viaje',
-  'Comida',
-  'Familia',
-  'Trabajo',
-  'Vida diaria',
-  'Estudio',
-  'Emociones',
-  'Tecnología',
-  'Naturaleza',
-  'Amor',
-  'Tiempo libre'
-];
+import { useEffect, useMemo, useState } from 'react';
+import { categories, lessonCards, phrases, vocabulary } from './data/lessons';
 
-export const phrases = [
-  {
-    id: 'saludo-1',
-    category: 'Saludo',
-    level: 'A1',
-    spanish: 'Hola, ¿cómo estás?',
-    english: 'Hello, how are you?',
-    chinese: '你好，你好吗？',
-    japanese: 'こんにちは、元気ですか？',
-    chinesePinyin: 'nǐ hǎo, nǐ hǎo ma?',
-    japaneseRomaji: 'konnichiwa, genki desu ka?',
-    tip: 'Perfecto para iniciar conversaciones y crear vínculos.',
-    emoji: '👋'
-  },
-  {
-    id: 'saludo-2',
-    category: 'Saludo',
-    level: 'A1',
-    spanish: 'Mucho gusto en conocerte.',
-    english: 'Nice to meet you.',
-    chinese: '很高兴认识你。',
-    japanese: 'はじめまして、よろしくお願いします。',
-    chinesePinyin: 'hěn gāo xìng rèn shí nǐ',
-    japaneseRomaji: 'hajimemashite, yoroshiku onegai shimasu',
-    tip: 'Frase clave para presentarte con confianza.',
-    emoji: '😊'
-  },
-  {
-    id: 'saludo-3',
-    category: 'Saludo',
-    level: 'A1',
-    spanish: 'Buenas tardes, ¿qué tal?',
-    english: 'Good afternoon, how are you?',
-    chinese: '下午好，你怎么样？',
-    japanese: 'こんばんは、どうですか？',
-    chinesePinyin: 'xià wǔ hǎo, nǐ zěn me yàng?',
-    japaneseRomaji: 'konbanwa, dō desu ka?',
-    tip: 'Ideal para saludos más naturales durante el día.',
-    emoji: '🌤️'
-  },
-  {
-    id: 'saludo-4',
-    category: 'Saludo',
-    level: 'A2',
-    spanish: 'Te veo luego, ¡cuídate!',
-    english: 'See you later, take care!',
-    chinese: '回头见，保重！',
-    japanese: 'また後でね、気をつけて！',
-    chinesePinyin: 'huí tóu jiàn, bǎo zhòng!',
-    japaneseRomaji: 'mata ato de ne, ki o tsukete!',
-    tip: 'Muy útil para despedirte con amabilidad.',
-    emoji: '👋'
-  },
-  {
-    id: 'viaje-1',
-    category: 'Viaje',
-    level: 'A2',
-    spanish: '¿Dónde está el baño?',
-    english: 'Where is the bathroom?',
-    chinese: '洗手间在哪里？',
-    japanese: 'トイレはどこですか？',
-    chinesePinyin: 'xǐ shǒu jiān zài nǎ lǐ?',
-    japaneseRomaji: 'toire wa doko desu ka?',
-    tip: 'Muy útil cuando viajas o visitas lugares nuevos.',
-    emoji: '🚻'
-  },
-  {
-    id: 'viaje-2',
-    category: 'Viaje',
-    level: 'A2',
-    spanish: 'Quiero reservar una habitación.',
-    english: 'I want to book a room.',
-    chinese: '我想预订一个房间。',
-    japanese: '部屋を予約したいです。',
-    chinesePinyin: 'wǒ xiǎng yù dìng yí gè fáng jiān',
-    japaneseRomaji: 'heya o yoyaku shitai desu',
-    tip: 'Ideal para hoteles y viajes internacionales.',
-    emoji: '🏨'
-  },
-  {
-    id: 'viaje-3',
-    category: 'Viaje',
-    level: 'A2',
-    spanish: '¿A qué hora sale el tren?',
-    english: 'What time does the train leave?',
-    chinese: '火车几点出发？',
-    japanese: '電車は何時に出発しますか？',
-    chinesePinyin: 'huǒ chē jǐ diǎn chū fā?',
-    japaneseRomaji: 'densha wa nanji ni shuppatsu shimasu ka?',
-    tip: 'Muy práctico para moverte por ciudades.',
-    emoji: '🚆'
-  },
-  {
-    id: 'viaje-4',
-    category: 'Viaje',
-    level: 'B1',
-    spanish: 'Necesito encontrar un transporte seguro.',
-    english: 'I need to find safe transportation.',
-    chinese: '我需要找到安全的交通工具。',
-    japanese: '安全な交通手段を見つける必要があります。',
-    chinesePinyin: 'wǒ xū yào zhǎo dào ān quán de jiāo tōng gōng jù',
-    japaneseRomaji: 'anzen na kōtsū shudan o mitsukeru hitsuyō ga arimasu',
-    tip: 'Útil para viajar con mayor confianza.',
-    emoji: '🚌'
-  },
-  {
-    id: 'comida-1',
-    category: 'Comida',
-    level: 'A1',
-    spanish: 'La comida está deliciosa.',
-    english: 'The food is delicious.',
-    chinese: '这食物太好吃了。',
-    japanese: '料理がとてもおいしいです。',
-    chinesePinyin: 'zhè shí wù tài hǎo chī le',
-    japaneseRomaji: 'ryōri ga totemo oishii desu',
-    tip: 'Perfecta para comentar en restaurantes y cenas.',
-    emoji: '🍜'
-  },
-  {
-    id: 'comida-2',
-    category: 'Comida',
-    level: 'A1',
-    spanish: 'Me gustaría un café, por favor.',
-    english: 'I would like a coffee, please.',
-    chinese: '我想要一杯咖啡，谢谢。',
-    japanese: 'コーヒーを一杯ください。',
-    chinesePinyin: 'wǒ xiǎng yào yì bēi kā fēi, xiè xiè',
-    japaneseRomaji: 'kōhī o ippai kudasai',
-    tip: 'Muy útil en cafeterías y locales cotidianos.',
-    emoji: '☕'
-  },
-  {
-    id: 'comida-3',
-    category: 'Comida',
-    level: 'A2',
-    spanish: '¿Tienen opciones vegetarianas?',
-    english: 'Do you have vegetarian options?',
-    chinese: '你们有素食选择吗？',
-    japanese: 'ベジタリアンのメニューはありますか？',
-    chinesePinyin: 'nǐ men yǒu sù shí xuǎn zé ma?',
-    japaneseRomaji: 'bejitarian no menyū wa arimasu ka?',
-    tip: 'Muy útil para pedir acorde a tus gustos.',
-    emoji: '🥗'
-  },
-  {
-    id: 'comida-4',
-    category: 'Comida',
-    level: 'A2',
-    spanish: 'La cuenta, por favor.',
-    english: 'The bill, please.',
-    chinese: '请给我结账。',
-    japanese: 'お会計をお願いします。',
-    chinesePinyin: 'qǐng gěi wǒ jié zhàng',
-    japaneseRomaji: 'okaikei o onegai shimasu',
-    tip: 'Frase imprescindible en restaurantes.',
-    emoji: '💳'
-  },
-  {
-    id: 'familia-1',
-    category: 'Familia',
-    level: 'A1',
-    spanish: 'Mi familia es muy unida.',
-    english: 'My family is very close.',
-    chinese: '我的家人很团结。',
-    japanese: '私の家族はとても仲が良いです。',
-    chinesePinyin: 'wǒ de jiā rén hěn tuán jié',
-    japaneseRomaji: 'watashi no kazoku wa totemo nakaga ii desu',
-    tip: 'Muy útil para hablar de tus seres queridos.',
-    emoji: '👨‍👩‍👧‍👦'
-  },
-  {
-    id: 'familia-2',
-    category: 'Familia',
-    level: 'A2',
-    spanish: 'Mis padres me apoyan mucho.',
-    english: 'My parents support me a lot.',
-    chinese: '我的父母非常支持我。',
-    japanese: '両親は私をとても支えてくれます。',
-    chinesePinyin: 'wǒ de fù mǔ fēi cháng zhī chí wǒ',
-    japaneseRomaji: 'ryōshin wa watashi o totemo sasaete kuremasu',
-    tip: 'Expresión natural para hablar de apoyo emocional.',
-    emoji: '💛'
-  },
-  {
-    id: 'familia-3',
-    category: 'Familia',
-    level: 'A1',
-    spanish: 'Tengo dos hermanos y una hermana.',
-    english: 'I have two brothers and one sister.',
-    chinese: '我有两个兄弟和一个妹妹。',
-    japanese: '兄が二人と妹が一人います。',
-    chinesePinyin: 'wǒ yǒu liǎng gè xiōng dì hé yí gè mèi mèi',
-    japaneseRomaji: 'ani ga futari to imōto ga hitori imasu',
-    tip: 'Perfecto para describir a tu familia.',
-    emoji: '👨‍👩‍👧'
-  },
-  {
-    id: 'familia-4',
-    category: 'Familia',
-    level: 'A2',
-    spanish: 'Me gusta pasar tiempo con mi familia.',
-    english: 'I like spending time with my family.',
-    chinese: '我喜欢和家人一起度过时光。',
-    japanese: '家族と時間を過ごすのが好きです。',
-    chinesePinyin: 'wǒ xǐ huān hé jiā rén yì qǐ dù guò shí guāng',
-    japaneseRomaji: 'kazoku to jikan o sugosu no ga suki desu',
-    tip: 'Muy natural para hablar de momentos queridos.',
-    emoji: '🎉'
-  },
-  {
-    id: 'trabajo-1',
-    category: 'Trabajo',
-    level: 'A2',
-    spanish: 'Trabajo en un proyecto importante.',
-    english: 'I work on an important project.',
-    chinese: '我在做一个重要的项目。',
-    japanese: '重要なプロジェクトに取り組んでいます。',
-    chinesePinyin: 'wǒ zài zuò yí gè zhòng yào de xiàng mù',
-    japaneseRomaji: 'jūyō na purojekuto ni torikunde imasu',
-    tip: 'Excelente para conversaciones profesionales.',
-    emoji: '💼'
-  },
-  {
-    id: 'trabajo-2',
-    category: 'Trabajo',
-    level: 'B1',
-    spanish: 'Necesitamos mejorar la comunicación del equipo.',
-    english: 'We need to improve team communication.',
-    chinese: '我们需要改善团队沟通。',
-    japanese: 'チームのコミュニケーションを改善する必要があります。',
-    chinesePinyin: 'wǒ men xū yào gǎi shàn tuán duì gōu tōng',
-    japaneseRomaji: 'chīmu no komyunikēshon o kaizen suru hitsuyō ga arimasu',
-    tip: 'Útil para hablar de colaboración en equipos.',
-    emoji: '🤝'
-  },
-  {
-    id: 'trabajo-3',
-    category: 'Trabajo',
-    level: 'A2',
-    spanish: 'Tengo una reunión importante esta tarde.',
-    english: 'I have an important meeting this afternoon.',
-    chinese: '我今天下午有一个重要会议。',
-    japanese: '今晩、重要な会議があります。',
-    chinesePinyin: 'wǒ jīn tiān xià wǔ yǒu yí gè zhòng yào huì yì',
-    japaneseRomaji: 'kyō no gogo ni jūyō na kaigi ga arimasu',
-    tip: 'Muy útil para rutinas profesionales.',
-    emoji: '🗓️'
-  },
-  {
-    id: 'trabajo-4',
-    category: 'Trabajo',
-    level: 'B1',
-    spanish: 'Estoy buscando nuevas oportunidades de crecimiento.',
-    english: 'I am looking for new growth opportunities.',
-    chinese: '我正在寻找新的成长机会。',
-    japanese: '新しい成長の機会を探しています。',
-    chinesePinyin: 'wǒ zhèng zài xún zhǎo xīn de chéng zhǎng jī huì',
-    japaneseRomaji: 'atarashii seichō no kikai o sagashiteimasu',
-    tip: 'Muy natural para hablar de desarrollo laboral.',
-    emoji: '🚀'
-  },
-  {
-    id: 'vida-1',
-    category: 'Vida diaria',
-    level: 'A1',
-    spanish: 'Hoy tengo mucho que hacer.',
-    english: 'Today I have a lot to do.',
-    chinese: '今天我有很多事情要做。',
-    japanese: '今日はやることがたくさんあります。',
-    chinesePinyin: 'jīn tiān wǒ yǒu hěn duō shì qíng yào zuò',
-    japaneseRomaji: 'kyō wa yaru koto ga takusan arimasu',
-    tip: 'Muy útil para describir tu rutina diaria.',
-    emoji: '📅'
-  },
-  {
-    id: 'vida-2',
-    category: 'Vida diaria',
-    level: 'A2',
-    spanish: 'Me gusta descansar y leer un rato.',
-    english: 'I like to relax and read for a while.',
-    chinese: '我喜欢休息一下并读一会儿书。',
-    japanese: 'リラックスして少し本を読むのが好きです。',
-    chinesePinyin: 'wǒ xǐ huān xiū xí yí xià bìng dú yī huì er shū',
-    japaneseRomaji: 'rirakkusu shite sukoshi hon o yomu no ga suki desu',
-    tip: 'Perfecto para hablar de hábitos y bienestar.',
-    emoji: '📖'
-  },
-  {
-    id: 'vida-3',
-    category: 'Vida diaria',
-    level: 'A1',
-    spanish: 'Me levanto temprano todos los días.',
-    english: 'I wake up early every day.',
-    chinese: '我每天都很早起床。',
-    japanese: '毎日早く起きます。',
-    chinesePinyin: 'wǒ měi tiān dōu hěn zǎo qǐ chuáng',
-    japaneseRomaji: 'mainichi hayaku okimasu',
-    tip: 'Excelente para hablar de rutinas y horarios.',
-    emoji: '🌅'
-  },
-  {
-    id: 'vida-4',
-    category: 'Vida diaria',
-    level: 'A2',
-    spanish: 'Necesito comprar algunas cosas hoy.',
-    english: 'I need to buy a few things today.',
-    chinese: '我今天需要买一些东西。',
-    japanese: '今日はいくつか買い物をしないといけません。',
-    chinesePinyin: 'wǒ jīn tiān xū yào mǎi yì xiē dōng xī',
-    japaneseRomaji: 'kyō wa ikutsuka kaimono o shinai to ikemasen',
-    tip: 'Muy útil para ir al supermercado o tiendas.',
-    emoji: '🛒'
-  },
-  {
-    id: 'estudio-1',
-    category: 'Estudio',
-    level: 'A1',
-    spanish: 'Estoy aprendiendo español con mucha paciencia.',
-    english: 'I am learning Spanish with a lot of patience.',
-    chinese: '我正在用很多耐心学习西班牙语。',
-    japanese: '私は多くの忍耐を持ってスペイン語を勉強しています。',
-    chinesePinyin: 'wǒ zhèng zài yòng hěn duō nài xīn xué xí xī bān yá yǔ',
-    japaneseRomaji: 'watashi wa ōku no ninpai o motte supeingo o benkyō shiteimasu',
-    tip: 'Perfecto para hablar de progreso personal.',
-    emoji: '📚'
-  },
-  {
-    id: 'estudio-2',
-    category: 'Estudio',
-    level: 'A2',
-    spanish: 'Necesito practicar más pronunciación.',
-    english: 'I need to practice pronunciation more.',
-    chinese: '我需要多练习发音。',
-    japanese: '発音をもっと練習する必要があります。',
-    chinesePinyin: 'wǒ xū yào duō liàn xí fā yīn',
-    japaneseRomaji: 'hatsuon o motto renshū suru hitsuyō ga arimasu',
-    tip: 'La clave para sonar más natural.',
-    emoji: '🗣️'
-  },
-  {
-    id: 'estudio-3',
-    category: 'Estudio',
-    level: 'A2',
-    spanish: 'Me encanta estudiar idiomas por la noche.',
-    english: 'I love studying languages at night.',
-    chinese: '我喜欢在晚上学习语言。',
-    japanese: '夜に言語を勉強するのが好きです。',
-    chinesePinyin: 'wǒ xǐ huān zài wǎn shàng xué xí yǔ yán',
-    japaneseRomaji: 'yoru ni gengo o benkyō suru no ga suki desu',
-    tip: 'Muy útil para rutinas de aprendizaje.',
-    emoji: '🌙'
-  },
-  {
-    id: 'estudio-4',
-    category: 'Estudio',
-    level: 'B1',
-    spanish: 'Estoy creando una rutina de estudio muy efectiva.',
-    english: 'I am creating a very effective study routine.',
-    chinese: '我正在制定一个非常有效的学习计划。',
-    japanese: '非常に効果的な学習ルーチンを作っています。',
-    chinesePinyin: 'wǒ zhèng zài zhì dìng yí gè fēi cháng yǒu xiào de xué xí jì huà',
-    japaneseRomaji: 'hijō ni kōkōteki na gakushū rūtin o tsukutteimasu',
-    tip: 'Ideal para hablar de metas y disciplina.',
-    emoji: '✅'
-  },
-  {
-    id: 'emociones-1',
-    category: 'Emociones',
-    level: 'A1',
-    spanish: 'Estoy muy contento hoy.',
-    english: 'I am very happy today.',
-    chinese: '我今天很开心。',
-    japanese: '今日はとても嬉しいです。',
-    chinesePinyin: 'wǒ jīn tiān hěn kāi xīn',
-    japaneseRomaji: 'kyō wa totemo ureshii desu',
-    tip: 'Perfecto para expresar alegría.',
-    emoji: '😄'
-  },
-  {
-    id: 'emociones-2',
-    category: 'Emociones',
-    level: 'A2',
-    spanish: 'Me siento nervioso antes del examen.',
-    english: 'I feel nervous before the exam.',
-    chinese: '我在考试前感到紧张。',
-    japanese: '試験の前で緊張しています。',
-    chinesePinyin: 'wǒ zài kǎo shì qián gǎn dào jǐn zhāng',
-    japaneseRomaji: 'shiken no mae de kinchō shiteimasu',
-    tip: 'Útil para describir estrés y ansiedad.',
-    emoji: '😬'
-  },
-  {
-    id: 'emociones-3',
-    category: 'Emociones',
-    level: 'A2',
-    spanish: 'Me siento tranquilo cuando escucho música.',
-    english: 'I feel calm when I listen to music.',
-    chinese: '我听音乐时会感到放松。',
-    japanese: '音楽を聴くと落ち着きます。',
-    chinesePinyin: 'wǒ tīng yīn yuè shí huì gǎn dào fàng sōng',
-    japaneseRomaji: 'ongaku o kiku to ochitsukimasu',
-    tip: 'Excelente para hablar del bienestar emocional.',
-    emoji: '🎶'
-  },
-  {
-    id: 'emociones-4',
-    category: 'Emociones',
-    level: 'B1',
-    spanish: 'A veces necesito un momento para respirar y pensar.',
-    english: 'Sometimes I need a moment to breathe and think.',
-    chinese: '有时我需要一点时间来呼吸和思考。',
-    japanese: '時々、息を整えて考える時間が必要です。',
-    chinesePinyin: 'yǒu shí wǒ xū yào yì diǎn shí jiān lái hū xī hé sī kǎo',
-    japaneseRomaji: 'tokidoki, iki o totonoete kangaeru jikan ga hitsuyō desu',
-    tip: 'Muy natural para expresar autoconciencia.',
-    emoji: '🫶'
-  },
-  {
-    id: 'tecnologia-1',
-    category: 'Tecnología',
-    level: 'A1',
-    spanish: 'Necesito mi teléfono para comunicarme.',
-    english: 'I need my phone to communicate.',
-    chinese: '我需要手机来交流。',
-    japanese: '連絡するために携帯が必要です。',
-    chinesePinyin: 'wǒ xū yào shǒu jī lái jiāo liú',
-    japaneseRomaji: 'renraku suru tame ni keitai ga hitsuyō desu',
-    tip: 'Término útil para conversaciones modernas.',
-    emoji: '📱'
-  },
-  {
-    id: 'tecnologia-2',
-    category: 'Tecnología',
-    level: 'A2',
-    spanish: 'Mi laptop es muy rápida y útil.',
-    english: 'My laptop is very fast and useful.',
-    chinese: '我的电脑很快也很有用。',
-    japanese: 'ノートパソコンはとても速くて便利です。',
-    chinesePinyin: 'wǒ de diàn nǎo hěn kuài yě hěn yǒu yòng',
-    japaneseRomaji: 'nōto pasokon wa totemo hayakute benri desu',
-    tip: 'Perfecto para hablar de herramientas digitales.',
-    emoji: '💻'
-  },
-  {
-    id: 'tecnologia-3',
-    category: 'Tecnología',
-    level: 'A2',
-    spanish: 'Me gusta aprender con aplicaciones.',
-    english: 'I like learning with apps.',
-    chinese: '我喜欢用应用程序学习。',
-    japanese: 'アプリで学ぶのが好きです。',
-    chinesePinyin: 'wǒ xǐ huān yòng yìng yòng chéng xù xué xí',
-    japaneseRomaji: 'apuri de manabu no ga suki desu',
-    tip: 'Muy útil para estudiar con tecnología.',
-    emoji: '📲'
-  },
-  {
-    id: 'tecnologia-4',
-    category: 'Tecnología',
-    level: 'B1',
-    spanish: 'La inteligencia artificial puede apoyar el aprendizaje.',
-    english: 'Artificial intelligence can support learning.',
-    chinese: '人工智能可以支持学习。',
-    japanese: '人工知能は学習をサポートできます。',
-    chinesePinyin: 'rén gōng zhì néng kě yǐ zhī chí xué xí',
-    japaneseRomaji: 'jinkō chōnō wa gakushū o sapōto dekimasu',
-    tip: 'Ideal para hablar del futuro del aprendizaje.',
-    emoji: '🤖'
-  },
-  {
-    id: 'naturaleza-1',
-    category: 'Naturaleza',
-    level: 'A1',
-    spanish: 'El cielo está muy bonito hoy.',
-    english: 'The sky looks very beautiful today.',
-    chinese: '今天天空很漂亮。',
-    japanese: '今日は空がとてもきれいです。',
-    chinesePinyin: 'jīn tiān tiān kōng hěn piào liàng',
-    japaneseRomaji: 'kyō wa sora ga totemo kirei desu',
-    tip: 'Muy natural para observar tu entorno.',
-    emoji: '🌤️'
-  },
-  {
-    id: 'naturaleza-2',
-    category: 'Naturaleza',
-    level: 'A1',
-    spanish: 'Me gusta caminar por el parque.',
-    english: 'I like walking in the park.',
-    chinese: '我喜欢在公园里散步。',
-    japanese: '公園を散歩するのが好きです。',
-    chinesePinyin: 'wǒ xǐ huān zài gōng yuán lǐ sàn bù',
-    japaneseRomaji: 'kōen o sanpo suru no ga suki desu',
-    tip: 'Perfecto para ocio y relajación.',
-    emoji: '🌳'
-  },
-  {
-    id: 'naturaleza-3',
-    category: 'Naturaleza',
-    level: 'A2',
-    spanish: 'El agua del río es muy clara.',
-    english: 'The river water is very clear.',
-    chinese: '河水非常清澈。',
-    japanese: '川の水はとても澄んでいます。',
-    chinesePinyin: 'hé shuǐ fēi cháng qīng chè',
-    japaneseRomaji: 'kawa no mizu wa totemo sukandeimasu',
-    tip: 'Frase útil para describir paisajes.',
-    emoji: '💧'
-  },
-  {
-    id: 'naturaleza-4',
-    category: 'Naturaleza',
-    level: 'B1',
-    spanish: 'La naturaleza ayuda a reducir el estrés.',
-    english: 'Nature helps reduce stress.',
-    chinese: '大自然有助于缓解压力。',
-    japanese: '自然はストレスを軽減するのに役立ちます。',
-    chinesePinyin: 'dà zì rán yǒu zhù yú huǎn jiě yā lǐ',
-    japaneseRomaji: 'shizen wa sutoresu o keigen suru no ni yakudatsu',
-    tip: 'Excelente para hablar de bienestar.',
-    emoji: '🌿'
-  },
-  {
-    id: 'amor-1',
-    category: 'Amor',
-    level: 'A1',
-    spanish: 'Te quiero mucho.',
-    english: 'I love you very much.',
-    chinese: '我非常爱你。',
-    japanese: 'とても愛しています。',
-    chinesePinyin: 'wǒ fēi cháng ài nǐ',
-    japaneseRomaji: 'totemo aishiteimasu',
-    tip: 'Una de las frases más importantes.',
-    emoji: '💖'
-  },
-  {
-    id: 'amor-2',
-    category: 'Amor',
-    level: 'A2',
-    spanish: 'Eres muy especial para mí.',
-    english: 'You are very special to me.',
-    chinese: '你对我来说很特别。',
-    japanese: 'あなたは私にとってとても特別です。',
-    chinesePinyin: 'nǐ duì wǒ lái shuō hěn tè bié',
-    japaneseRomaji: 'anata wa watashi ni totte totemo tokubetsu desu',
-    tip: 'Ideal para expresar cariño sincero.',
-    emoji: '💌'
-  },
-  {
-    id: 'amor-3',
-    category: 'Amor',
-    level: 'A2',
-    spanish: 'Quiero pasar más tiempo contigo.',
-    english: 'I want to spend more time with you.',
-    chinese: '我想和你多待一会儿。',
-    japanese: 'もっと一緒に時間を過ごしたいです。',
-    chinesePinyin: 'wǒ xiǎng hé nǐ duō dài yì huì er',
-    japaneseRomaji: 'motto issho ni jikan o sugoshitai desu',
-    tip: 'Perfecto para expresar cercanía emocional.',
-    emoji: '🫶'
-  },
-  {
-    id: 'amor-4',
-    category: 'Amor',
-    level: 'B1',
-    spanish: 'Nuestra relación me hace sentir muy feliz.',
-    english: 'Our relationship makes me feel very happy.',
-    chinese: '我们的关系让我感到非常幸福。',
-    japanese: '私たちの関係は私をとても幸せにします。',
-    chinesePinyin: 'wǒ men de guān xì ràng wǒ gǎn dào fēi cháng xìng fú',
-    japaneseRomaji: 'watashitachi no kankei wa watashi o totemo shiawase ni shimasu',
-    tip: 'Expresión romántica más profunda.',
-    emoji: '💞'
-  },
-  {
-    id: 'tiempo-1',
-    category: 'Tiempo libre',
-    level: 'A1',
-    spanish: 'Me gusta jugar videojuegos.',
-    english: 'I like playing video games.',
-    chinese: '我喜欢玩电子游戏。',
-    japanese: 'ゲームをするのが好きです。',
-    chinesePinyin: 'wǒ xǐ huān wán diàn zǐ yóu xì',
-    japaneseRomaji: 'gēmu o suru no ga suki desu',
-    tip: 'Muy natural para hablar de hobbies.',
-    emoji: '🎮'
-  },
-  {
-    id: 'tiempo-2',
-    category: 'Tiempo libre',
-    level: 'A1',
-    spanish: 'Me gusta escuchar música en mi tiempo libre.',
-    english: 'I like listening to music in my free time.',
-    chinese: '我喜欢在空闲时间听音乐。',
-    japanese: '空き時間に音楽を聴くのが好きです。',
-    chinesePinyin: 'wǒ xǐ huān zài kòng xián shí jiān tīng yīn yuè',
-    japaneseRomaji: 'akijikan ni ongaku o kiku no ga suki desu',
-    tip: 'Perfecto para hablar de relajación.',
-    emoji: '🎵'
-  },
-  {
-    id: 'tiempo-3',
-    category: 'Tiempo libre',
-    level: 'A2',
-    spanish: 'Quiero ir al cine este fin de semana.',
-    english: 'I want to go to the cinema this weekend.',
-    chinese: '这个周末我想去看电影。',
-    japanese: '今週末に映画を見に行きたいです。',
-    chinesePinyin: 'zhè gè zhōu mò wǒ xiǎng qù kàn diàn yǐng',
-    japaneseRomaji: 'konshūmatsu ni eiga o mi ni ikitai desu',
-    tip: 'Muy útil para planes de ocio.',
-    emoji: '🎬'
-  },
-  {
-    id: 'tiempo-4',
-    category: 'Tiempo libre',
-    level: 'B1',
-    spanish: 'Disfruto de actividades creativas para descansar.',
-    english: 'I enjoy creative activities to relax.',
-    chinese: '我喜欢做一些有创意的活动来放松。',
-    japanese: 'リラックスするために創造的な活動を楽しんでいます。',
-    chinesePinyin: 'wǒ xǐ huān zuò yì xiē yǒu chuàng yì de huó dòng lái fàng sōng',
-    japaneseRomaji: 'rirakkusu suru tame ni sōzōteki na katsudō o tanoshindeimasu',
-    tip: 'Ideal para hablar de hobbies significativos.',
-    emoji: '🎨'
+type LanguageCode = 'es' | 'en' | 'zh' | 'ja';
+type TabMode = 'frases' | 'flashcards' | 'palabras';
+
+type PersistedProgress = {
+  xp: number;
+  streak: number;
+  completed: string[];
+  lastDay: string;
+};
+
+const STORAGE_KEY = 'linguamix-progress-v4';
+
+const languageMeta: Record<LanguageCode, { label: string; accent: string; flag: string }> = {
+  es: { label: 'Español', accent: 'es-ES', flag: '🇪🇸' },
+  en: { label: 'English', accent: 'en-US', flag: '🇺🇸' },
+  zh: { label: '中文', accent: 'zh-CN', flag: '🇨🇳' },
+  ja: { label: '日本語', accent: 'ja-JP', flag: '🇯🇵' }
+};
+
+const shuffle = <T,>(items: T[]) => [...items].sort(() => Math.random() - 0.5);
+
+const readProgress = (): PersistedProgress => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+
+  if (!saved) {
+    return { xp: 0, streak: 1, completed: [], lastDay: '' };
   }
-];
 
-export const vocabulary = [
-  { es: 'amigo', en: 'friend', zh: '朋友', ja: '友達' },
-  { es: 'escuela', en: 'school', zh: '学校', ja: '学校' },
-  { es: 'tiempo', en: 'time', zh: '时间', ja: '時間' },
-  { es: 'casa', en: 'house', zh: '家', ja: '家' },
-  { es: 'comida', en: 'food', zh: '食物', ja: '食べ物' },
-  { es: 'aprender', en: 'to learn', zh: '学习', ja: '学ぶ' },
-  { es: 'sonrisa', en: 'smile', zh: '微笑', ja: '笑顔' },
-  { es: 'camino', en: 'path', zh: '道路', ja: '道' },
-  { es: 'música', en: 'music', zh: '音乐', ja: '音楽' },
-  { es: 'descanso', en: 'rest', zh: '休息', ja: '休憩' },
-  { es: 'trabajo', en: 'work', zh: '工作', ja: '仕事' },
-  { es: 'tecnología', en: 'technology', zh: '技术', ja: '技術' }
-];
-
-export const lessonCards = [
-  {
-    tag: 'Semana 1',
-    title: 'Saludos básicos',
-    description: 'Conoce frases esenciales para presentarte y empezar conversaciones.',
-    points: ['Hola', '¿Cómo estás?', 'Mucho gusto']
-  },
-  {
-    tag: 'Semana 2',
-    title: 'Viajes y direcciones',
-    description: 'Aprende a pedir ayuda, preguntar por lugares y moverte con seguridad.',
-    points: ['Dónde está', 'Reservar', 'Transporte']
-  },
-  {
-    tag: 'Semana 3',
-    title: 'Comida y restaurantes',
-    description: 'Mejora tu vocabulario para comer, pedir y describir sabores.',
-    points: ['Menú', 'Café', 'Delicioso']
-  },
-  {
-    tag: 'Semana 4',
-    title: 'Familia y trabajo',
-    description: 'Habla sobre relaciones, rutinas y proyectos profesionales.',
-    points: ['Padres', 'Equipo', 'Proyecto']
+  try {
+    const parsed = JSON.parse(saved) as Partial<PersistedProgress>;
+    return {
+      xp: Number(parsed.xp ?? 0),
+      streak: Number(parsed.streak ?? 1),
+      completed: Array.isArray(parsed.completed) ? parsed.completed : [],
+      lastDay: typeof parsed.lastDay === 'string' ? parsed.lastDay : ''
+    };
+  } catch {
+    return { xp: 0, streak: 1, completed: [], lastDay: '' };
   }
-];
+};
+
+const todayKey = () => new Date().toISOString().slice(0, 10);
+
+const speakText = (language: LanguageCode, text: string) => {
+  if (!('speechSynthesis' in window)) return;
+
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = languageMeta[language].accent;
+  utterance.rate = 0.9;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+  window.speechSynthesis.speak(utterance);
+};
+
+const speakSequence = (items: Array<{ language: LanguageCode; text: string }>) => {
+  if (!('speechSynthesis' in window)) return;
+
+  window.speechSynthesis.cancel();
+
+  let index = 0;
+  const playNext = () => {
+    if (index >= items.length) return;
+
+    const current = items[index];
+    const utterance = new SpeechSynthesisUtterance(current.text);
+    utterance.lang = languageMeta[current.language].accent;
+    utterance.rate = 0.86;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    utterance.onend = () => {
+      index += 1;
+      playNext();
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  playNext();
+};
+
+function App() {
+  const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [focusLanguage, setFocusLanguage] = useState<LanguageCode>('es');
+  const [quizResult, setQuizResult] = useState<string | null>(null);
+  const [dailyIndex, setDailyIndex] = useState(0);
+  const [tab, setTab] = useState<TabMode>('frases');
+  const [flashIndex, setFlashIndex] = useState(0);
+  const [revealed, setRevealed] = useState<Record<string, boolean>>({});
+  const [progress, setProgress] = useState<PersistedProgress>(() => readProgress());
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  }, [progress]);
+
+  useEffect(() => {
+    const today = todayKey();
+    if (progress.lastDay !== today) {
+      setProgress((prev) => ({
+        ...prev,
+        streak: prev.lastDay ? prev.streak + 1 : 1,
+        lastDay: today
+      }));
+    }
+  }, []);
+
+  const filteredPhrases = useMemo(() => {
+    if (selectedCategory === 'Todos') return phrases;
+    return phrases.filter((phrase) => phrase.category === selectedCategory);
+  }, [selectedCategory]);
+
+  const currentPhrase =
+    filteredPhrases[currentIndex % Math.max(filteredPhrases.length, 1)] ?? phrases[0];
+
+  const flashcards = useMemo(() => shuffle(vocabulary).slice(0, 6), []);
+  const currentWord = flashcards[flashIndex % flashcards.length] ?? vocabulary[0];
+
+  const addXp = (amount: number, id: string) => {
+    setProgress((prev) => {
+      const alreadyCompleted = prev.completed.includes(id);
+      return {
+        ...prev,
+        xp: prev.xp + amount,
+        completed: alreadyCompleted ? prev.completed : [...prev.completed, id]
+      };
+    });
+  };
+
+  const nextPhrase = () => {
+    if (filteredPhrases.length === 0) return;
+    setCurrentIndex((prev) => (prev + 1) % filteredPhrases.length);
+    addXp(12, currentPhrase.id);
+    setQuizResult(null);
+  };
+
+  const markAsLearned = () => {
+    addXp(25, `${currentPhrase.id}-learned`);
+    setQuizResult('¡Perfecto! Esa frase ya quedó en tu memoria.');
+  };
+
+  const nextFlashcard = () => {
+    setFlashIndex((prev) => prev + 1);
+    setRevealed((prev) => ({ ...prev, [currentWord.es]: false }));
+    addXp(10, `word-${currentWord.es}`);
+  };
+
+  const revealWord = (word: string) => {
+    setRevealed((prev) => ({ ...prev, [word]: !prev[word] }));
+    addXp(6, `reveal-${word}`);
+  };
+
+  const dailyPhrase = phrases[dailyIndex % phrases.length];
+
+  const quizOptions = useMemo(() => {
+    const correct = currentPhrase.english;
+    const wrongs = shuffle(
+      phrases.filter((phrase) => phrase.id !== currentPhrase.id).map((phrase) => phrase.english)
+    ).slice(0, 3);
+
+    return shuffle([correct, ...wrongs]).slice(0, 4);
+  }, [currentPhrase]);
+
+  const answerQuiz = (option: string) => {
+    if (option === currentPhrase.english) {
+      setQuizResult('¡Correcto! +35 XP.');
+      addXp(35, `${currentPhrase.id}-quiz`);
+      return;
+    }
+
+    setQuizResult('Muy cerca. Escucha de nuevo y prueba otra vez.');
+  };
+
+  const totalCompleted = progress.completed.length;
+  const completionPercent = Math.min((totalCompleted / Math.max(phrases.length, 1)) * 100, 100);
+  const level = Math.floor(progress.xp / 200) + 1;
+
+  const translations = (['es', 'en', 'zh', 'ja'] as LanguageCode[]).map((code) => ({
+    code,
+    flag: languageMeta[code].flag,
+    label: languageMeta[code].label,
+    value:
+      code === 'es'
+        ? currentPhrase.spanish
+        : code === 'en'
+          ? currentPhrase.english
+          : code === 'zh'
+            ? currentPhrase.chinese
+            : currentPhrase.japanese
+  }));
+
+  return (
+    <div className="app-shell">
+      <header className="topbar">
+        <div>
+          <p className="eyebrow">Aprendizaje creativo</p>
+          <h1>LinguaMix 4 Idiomas</h1>
+          <p className="subtitle">Español, inglés, chino y japonés creciendo juntos.</p>
+        </div>
+
+        <div className="topbar-badges">
+          <span className="badge pulse">Nivel {level}</span>
+          <span className="badge">🔥 {progress.streak} días</span>
+          <span className="badge">✨ {progress.xp} XP</span>
+        </div>
+      </header>
+
+      <section className="hero-metrics">
+        <div className="metric-card glow-cyan">
+          <span>Racha</span>
+          <strong>{progress.streak}</strong>
+          <small>días seguidos</small>
+        </div>
+        <div className="metric-card glow-violet">
+          <span>XP total</span>
+          <strong>{progress.xp}</strong>
+          <small>sin límites</small>
+        </div>
+        <div className="metric-card glow-green">
+          <span>Progreso</span>
+          <strong>{Math.round(completionPercent)}%</strong>
+          <small>memorizado</small>
+        </div>
+        <div className="metric-card glow-gold">
+          <span>Frases</span>
+          <strong>{totalCompleted}</strong>
+          <small>dominadas</small>
+        </div>
+      </section>
+
+      <div className="mode-switcher">
+        <button className={tab === 'frases' ? 'tab active' : 'tab'} onClick={() => setTab('frases')}>
+          Frases
+        </button>
+        <button className={tab === 'flashcards' ? 'tab active' : 'tab'} onClick={() => setTab('flashcards')}>
+          Flashcards
+        </button>
+        <button className={tab === 'palabras' ? 'tab active' : 'tab'} onClick={() => setTab('palabras')}>
+          Palabras
+        </button>
+      </div>
+
+      {tab === 'frases' && (
+        <main className="main-grid">
+          <section className="panel spotlight-panel">
+            <div className="panel-header">
+              <div>
+                <p className="eyebrow">Frase del día</p>
+                <h2>Aprender con 4 traducciones a la vez</h2>
+              </div>
+              <div className="header-actions">
+                <button
+                  className="secondary-btn"
+                  onClick={() =>
+                    speakSequence([
+                      { language: 'es', text: currentPhrase.spanish },
+                      { language: 'en', text: currentPhrase.english },
+                      { language: 'zh', text: currentPhrase.chinese },
+                      { language: 'ja', text: currentPhrase.japanese }
+                    ])
+                  }
+                >
+                  🔊 Escuchar todo
+                </button>
+                <button className="primary-btn" onClick={nextPhrase}>
+                  Siguiente frase
+                </button>
+              </div>
+            </div>
+
+            <div className="category-row">
+              {['Todos', ...categories].map((category) => (
+                <button
+                  key={category}
+                  className={selectedCategory === category ? 'chip active' : 'chip'}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+
+            <div className="focus-row">
+              {(['es', 'en', 'zh', 'ja'] as LanguageCode[]).map((code) => (
+                <button
+                  key={code}
+                  className={focusLanguage === code ? 'focus-pill active' : 'focus-pill'}
+                  onClick={() => setFocusLanguage(code)}
+                >
+                  {languageMeta[code].flag} {languageMeta[code].label}
+                </button>
+              ))}
+            </div>
+
+            <div className="phrase-card">
+              <div className="phrase-header">
+                <span className="tag">{currentPhrase.emoji} {currentPhrase.category}</span>
+                <span className="level">Nivel {currentPhrase.level}</span>
+              </div>
+
+              <h3 className="phrase-base">{currentPhrase.spanish}</h3>
+              <p className="phrase-tip">{currentPhrase.tip}</p>
+
+              <div className="translation-grid">
+                {translations.map(({ code, label, flag, value }) => (
+                  <article
+                    key={code}
+                    className={focusLanguage === code ? 'translation-box active' : 'translation-box'}
+                  >
+                    <div className="translation-top">
+                      <span className="language-name">
+                        {flag} {label}
+                      </span>
+                      <button
+                        className="listen-btn"
+                        onClick={() => speakText(code, value)}
+                        aria-label={`Escuchar ${label}`}
+                      >
+                        🔊
+                      </button>
+                    </div>
+
+                    <p className="translation-text">{value}</p>
+
+                    {code === 'zh' && currentPhrase.chinesePinyin && (
+                      <small className="phonetic">Pinyin: {currentPhrase.chinesePinyin}</small>
+                    )}
+                    {code === 'ja' && currentPhrase.japaneseRomaji && (
+                      <small className="phonetic">Romaji: {currentPhrase.japaneseRomaji}</small>
+                    )}
+                  </article>
+                ))}
+              </div>
+
+              <div className="phrase-actions">
+                <button className="secondary-btn" onClick={() => speakText('es', currentPhrase.spanish)}>
+                  🔁 Repetir español
+                </button>
+                <button className="ghost-btn" onClick={markAsLearned}>
+                  ✅ Marcar aprendida
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <aside className="panel side-panel">
+            <div className="panel-header compact">
+              <div>
+                <p className="eyebrow">Progreso</p>
+                <h2>Tu camino</h2>
+              </div>
+            </div>
+
+            <div className="progress-wrap">
+              <div className="progress-labels">
+                <span>Avance</span>
+                <strong>{Math.round(completionPercent)}%</strong>
+              </div>
+              <div className="progress-bar">
+                <span style={{ width: `${completionPercent}%` }} />
+              </div>
+            </div>
+
+            <div className="mini-grid">
+              <div className="stat-box">
+                <span>Frases</span>
+                <strong>{totalCompleted}</strong>
+              </div>
+              <div className="stat-box">
+                <span>Lecciones</span>
+                <strong>{categories.length}</strong>
+              </div>
+              <div className="stat-box">
+                <span>Modo</span>
+                <strong>Act.</strong>
+              </div>
+            </div>
+
+            <div className="daily-card">
+              <p className="eyebrow">Reto diario</p>
+              <h3>{dailyPhrase.emoji} {dailyPhrase.spanish}</h3>
+              <p>{dailyPhrase.english}</p>
+              <button
+                className="secondary-btn"
+                onClick={() => {
+                  setDailyIndex((prev) => prev + 1);
+                  speakText('es', dailyPhrase.spanish);
+                }}
+              >
+                Siguiente reto
+              </button>
+            </div>
+
+            <div className="achievement-panel">
+              <p className="eyebrow">Logros</p>
+              <ul>
+                <li>🏆 Primeros 200 XP</li>
+                <li>🔥 Racha de 3 días</li>
+                <li>🌟 10 frases aprendidas</li>
+              </ul>
+            </div>
+          </aside>
+        </main>
+      )}
+
+      {tab === 'flashcards' && (
+        <section className="panel flashcard-panel">
+          <div className="panel-header compact">
+            <div>
+              <p className="eyebrow">Flashcards</p>
+              <h2>Memoriza palabras clave</h2>
+            </div>
+            <button className="primary-btn" onClick={nextFlashcard}>Siguiente</button>
+          </div>
+
+          <div className="flashcard-shell">
+            <div className="flashcard-face">
+              <span className="lesson-tag">Palabra</span>
+              <h3>{currentWord.es}</h3>
+              <p>{currentWord.en}</p>
+              <button className="secondary-btn" onClick={() => revealWord(currentWord.es)}>
+                {revealed[currentWord.es] ? 'Ocultar traducción' : 'Mostrar traducciones'}
+              </button>
+            </div>
+
+            {revealed[currentWord.es] && (
+              <div className="flashcard-back">
+                <div className="mini-translation-grid">
+                  {([
+                    { lang: 'es', value: currentWord.es },
+                    { lang: 'en', value: currentWord.en },
+                    { lang: 'zh', value: currentWord.zh },
+                    { lang: 'ja', value: currentWord.ja }
+                  ] as Array<{ lang: LanguageCode; value: string }>).map((entry) => (
+                    <button
+                      key={entry.lang}
+                      className="mini-translation"
+                      onClick={() => speakText(entry.lang, entry.value)}
+                    >
+                      {languageMeta[entry.lang].flag} {entry.value}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {tab === 'palabras' && (
+        <section className="panel vocab-panel full-width">
+          <div className="panel-header compact">
+            <div>
+              <p className="eyebrow">Banco de palabras</p>
+              <h2>Repite y practica con frecuencia</h2>
+            </div>
+          </div>
+
+          <div className="vocab-grid">
+            {vocabulary.map((item) => (
+              <div className="vocab-card" key={item.es}>
+                <h3>{item.es}</h3>
+                <p>{item.en}</p>
+                <div className="vocab-tags">
+                  <span>{item.zh}</span>
+                  <span>{item.ja}</span>
+                </div>
+                <button className="ghost-btn" onClick={() => speakSequence([
+                  { language: 'es', text: item.es },
+                  { language: 'en', text: item.en },
+                  { language: 'zh', text: item.zh },
+                  { language: 'ja', text: item.ja }
+                ])}>
+                  🔊 Escuchar
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {tab === 'frases' && (
+        <>
+          <section className="bottom-grid">
+            <div className="panel quiz-panel">
+              <div className="panel-header compact">
+                <div>
+                  <p className="eyebrow">Quiz</p>
+                  <h2>¿Cuál es la traducción correcta?</h2>
+                </div>
+              </div>
+
+              <div className="quiz-box">
+                <p className="quiz-question">Selecciona la traducción en inglés de: “{currentPhrase.spanish}”</p>
+                <div className="quiz-options">
+                  {quizOptions.map((option) => (
+                    <button key={option} className="quiz-btn" onClick={() => answerQuiz(option)}>
+                      {option}
+                    </button>
+                  ))}
+                </div>
+                {quizResult && <p className="quiz-result">{quizResult}</p>}
+              </div>
+            </div>
+
+            <div className="panel vocab-panel">
+              <div className="panel-header compact">
+                <div>
+                  <p className="eyebrow">Vocabulario</p>
+                  <h2>Palabras útiles</h2>
+                </div>
+              </div>
+
+              <div className="vocab-list">
+                {vocabulary.map((item) => (
+                  <div className="vocab-item" key={item.es}>
+                    <div>
+                      <strong>{item.es}</strong>
+                      <span>{item.en}</span>
+                    </div>
+                    <div>
+                      <small>{item.zh}</small>
+                      <small>{item.ja}</small>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="panel lessons-panel">
+            <div className="panel-header compact">
+              <div>
+                <p className="eyebrow">Lecciones</p>
+                <h2>Ruta de aprendizaje</h2>
+              </div>
+            </div>
+
+            <div className="lessons-grid">
+              {lessonCards.map((lesson) => (
+                <div key={lesson.title} className="lesson-card">
+                  <span className="lesson-tag">{lesson.tag}</span>
+                  <h3>{lesson.title}</h3>
+                  <p>{lesson.description}</p>
+                  <ul>
+                    {lesson.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default App;
