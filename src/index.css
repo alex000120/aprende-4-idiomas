@@ -1,0 +1,160 @@
+export const categories = ['Saludo', 'Viaje', 'Comida', 'Familia', 'Trabajo'];
+
+export const phrases = [
+  {
+    id: 'saludo-1',
+    category: 'Saludo',
+    level: 'A1',
+    spanish: 'Hola, ¿cómo estás?',
+    english: 'Hello, how are you?',
+    chinese: '你好，你好吗？',
+    japanese: 'こんにちは、元気ですか？',
+    chinesePinyin: 'nǐ hǎo, nǐ hǎo ma?',
+    japaneseRomaji: 'konnichiwa, genki desu ka?',
+    tip: 'Perfecto para comenzar conversaciones y saludos cotidianos.'
+  },
+  {
+    id: 'saludo-2',
+    category: 'Saludo',
+    level: 'A1',
+    spanish: 'Mucho gusto en conocerte.',
+    english: 'Nice to meet you.',
+    chinese: '很高兴认识你。',
+    japanese: 'はじめまして、よろしくお願いします。',
+    chinesePinyin: 'hěn gāo xìng rèn shí nǐ',
+    japaneseRomaji: 'hajimemashite, yoroshiku onegai shimasu',
+    tip: 'Frase clave para presentarte en cualquier idioma.'
+  },
+  {
+    id: 'viaje-1',
+    category: 'Viaje',
+    level: 'A2',
+    spanish: '¿Dónde está el baño?',
+    english: 'Where is the bathroom?',
+    chinese: '洗手间在哪里？',
+    japanese: 'トイレはどこですか？',
+    chinesePinyin: 'xǐ shǒu jiān zài nǎ lǐ?',
+    japaneseRomaji: 'toire wa doko desu ka?',
+    tip: 'Muy útil cuando viajas o visitas lugares nuevos.'
+  },
+  {
+    id: 'viaje-2',
+    category: 'Viaje',
+    level: 'A2',
+    spanish: 'Quiero reservar una habitación.',
+    english: 'I want to book a room.',
+    chinese: '我想预订一个房间。',
+    japanese: '部屋を予約したいです。',
+    chinesePinyin: 'wǒ xiǎng yù dìng yí gè fáng jiān',
+    japaneseRomaji: 'heya o yoyaku shitai desu',
+    tip: 'Ideal para hoteles, hostels y viajes internacionales.'
+  },
+  {
+    id: 'comida-1',
+    category: 'Comida',
+    level: 'A1',
+    spanish: 'La comida está deliciosa.',
+    english: 'The food is delicious.',
+    chinese: '这食物太好吃了。',
+    japanese: '料理がとてもおいしいです。',
+    chinesePinyin: 'zhè shí wù tài hǎo chī le',
+    japaneseRomaji: 'ryōri ga totemo oishii desu',
+    tip: 'Perfecta para comentar en restaurantes y cenas.'
+  },
+  {
+    id: 'comida-2',
+    category: 'Comida',
+    level: 'A1',
+    spanish: 'Me gustaría un café, por favor.',
+    english: 'I would like a coffee, please.',
+    chinese: '我想要一杯咖啡，谢谢。',
+    japanese: 'コーヒーを一杯ください。',
+    chinesePinyin: 'wǒ xiǎng yào yì bēi kā fēi, xiè xiè',
+    japaneseRomaji: 'kōhī o ippai kudasai',
+    tip: 'Muy útil en cafeterías y locales cotidianos.'
+  },
+  {
+    id: 'familia-1',
+    category: 'Familia',
+    level: 'A1',
+    spanish: 'Mi familia es muy unida.',
+    english: 'My family is very close.',
+    chinese: '我的家人很团结。',
+    japanese: '私の家族はとても仲が良いです。',
+    chinesePinyin: 'wǒ de jiā rén hěn tuán jié',
+    japaneseRomaji: 'watashi no kazoku wa totemo nakaga ii desu',
+    tip: 'Relación familiar y expresiones de cariño.'
+  },
+  {
+    id: 'familia-2',
+    category: 'Familia',
+    level: 'A2',
+    spanish: 'Mis padres me apoyan mucho.',
+    english: 'My parents support me a lot.',
+    chinese: '我的父母非常支持我。',
+    japanese: '両親は私をとても支えてくれます。',
+    chinesePinyin: 'wǒ de fù mǔ fēi cháng zhī chí wǒ',
+    japaneseRomaji: 'ryōshin wa watashi o totemo sasaete kuremasu',
+    tip: 'Muy útil para hablar de la vida diaria y relaciones.'
+  },
+  {
+    id: 'trabajo-1',
+    category: 'Trabajo',
+    level: 'A2',
+    spanish: 'Trabajo en un proyecto importante.',
+    english: 'I work on an important project.',
+    chinese: '我在做一个重要的项目。',
+    japanese: '重要なプロジェクトに取り組んでいます。',
+    chinesePinyin: 'wǒ zài zuò yí gè zhòng yào de xiàng mù',
+    japaneseRomaji: 'jūyō na purojekuto ni torikunde imasu',
+    tip: 'Excelente para conversaciones profesionales.'
+  },
+  {
+    id: 'trabajo-2',
+    category: 'Trabajo',
+    level: 'B1',
+    spanish: 'Necesitamos mejorar la comunicación del equipo.',
+    english: 'We need to improve team communication.',
+    chinese: '我们需要改善团队沟通。',
+    japanese: 'チームのコミュニケーションを改善する必要があります。',
+    chinesePinyin: 'wǒ men xū yào gǎi shàn tuán duì gōu tōng',
+    japaneseRomaji: 'chīmu no komyunikēshon o kaizen suru hitsuyō ga arimasu',
+    tip: 'Útil para hablar de coordinación laboral y colaboración.'
+  }
+];
+
+export const vocabulary = [
+  { es: 'amigo', en: 'friend', zh: '朋友', ja: '友達' },
+  { es: 'escuela', en: 'school', zh: '学校', ja: '学校' },
+  { es: 'tiempo', en: 'time', zh: '时间', ja: '時間' },
+  { es: 'casa', en: 'house', zh: '家', ja: '家' },
+  { es: 'comida', en: 'food', zh: '食物', ja: '食べ物' },
+  { es: 'aprender', en: 'to learn', zh: '学习', ja: '学ぶ' }
+];
+
+export const lessonCards = [
+  {
+    tag: 'Semana 1',
+    title: 'Saludos básicos',
+    description: 'Conoce frases esenciales para presentarte y empezar conversaciones.',
+    points: ['Hola', '¿Cómo estás?', 'Mucho gusto']
+  },
+  {
+    tag: 'Semana 2',
+    title: 'Viajes y direcciones',
+    description: 'Aprende a pedir ayuda, preguntar por lugares y moverte con seguridad.',
+    points: ['Dónde está', 'Reservar', 'Mochila y transporte']
+  },
+  {
+    tag: 'Semana 3',
+    title: 'Comida y restaurantes',
+    description: 'Mejora tu vocabulario para comer, pedir y describir sabores.',
+    points: ['Menú', 'Cafe', 'Delicioso']
+  },
+  {
+    tag: 'Semana 4',
+    title: 'Familia y trabajo',
+    description: 'Habla sobre relaciones, rutinas y proyectos profesionales.',
+    points: ['Padres', 'Equipo', 'Proyecto']
+  }
+];
