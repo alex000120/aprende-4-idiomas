@@ -1,4 +1,4 @@
-export const categories = ['Saludo', 'Viaje', 'Comida', 'Familia', 'Trabajo'];
+export const categories = ['Saludo', 'Viaje', 'Comida', 'Familia', 'Trabajo', 'Vida diaria'];
 
 export const phrases = [
   {
@@ -11,7 +11,8 @@ export const phrases = [
     japanese: 'こんにちは、元気ですか？',
     chinesePinyin: 'nǐ hǎo, nǐ hǎo ma?',
     japaneseRomaji: 'konnichiwa, genki desu ka?',
-    tip: 'Perfecto para comenzar conversaciones y saludos cotidianos.'
+    tip: 'Perfecto para iniciar conversaciones y crear vínculos.',
+    emoji: '👋'
   },
   {
     id: 'saludo-2',
@@ -23,7 +24,8 @@ export const phrases = [
     japanese: 'はじめまして、よろしくお願いします。',
     chinesePinyin: 'hěn gāo xìng rèn shí nǐ',
     japaneseRomaji: 'hajimemashite, yoroshiku onegai shimasu',
-    tip: 'Frase clave para presentarte en cualquier idioma.'
+    tip: 'Frase clave para presentarte con confianza.',
+    emoji: '😊'
   },
   {
     id: 'viaje-1',
@@ -35,7 +37,8 @@ export const phrases = [
     japanese: 'トイレはどこですか？',
     chinesePinyin: 'xǐ shǒu jiān zài nǎ lǐ?',
     japaneseRomaji: 'toire wa doko desu ka?',
-    tip: 'Muy útil cuando viajas o visitas lugares nuevos.'
+    tip: 'Muy útil cuando viajas o visitas lugares nuevos.',
+    emoji: '🚻'
   },
   {
     id: 'viaje-2',
@@ -47,7 +50,8 @@ export const phrases = [
     japanese: '部屋を予約したいです。',
     chinesePinyin: 'wǒ xiǎng yù dìng yí gè fáng jiān',
     japaneseRomaji: 'heya o yoyaku shitai desu',
-    tip: 'Ideal para hoteles, hostels y viajes internacionales.'
+    tip: 'Ideal para hoteles y viajes internacionales.',
+    emoji: '🏨'
   },
   {
     id: 'comida-1',
@@ -59,7 +63,8 @@ export const phrases = [
     japanese: '料理がとてもおいしいです。',
     chinesePinyin: 'zhè shí wù tài hǎo chī le',
     japaneseRomaji: 'ryōri ga totemo oishii desu',
-    tip: 'Perfecta para comentar en restaurantes y cenas.'
+    tip: 'Perfecta para comentar en restaurantes y cenas.',
+    emoji: '🍜'
   },
   {
     id: 'comida-2',
@@ -71,7 +76,8 @@ export const phrases = [
     japanese: 'コーヒーを一杯ください。',
     chinesePinyin: 'wǒ xiǎng yào yì bēi kā fēi, xiè xiè',
     japaneseRomaji: 'kōhī o ippai kudasai',
-    tip: 'Muy útil en cafeterías y locales cotidianos.'
+    tip: 'Muy útil para pedir en cafeterías o tiendas.',
+    emoji: '☕'
   },
   {
     id: 'familia-1',
@@ -83,7 +89,8 @@ export const phrases = [
     japanese: '私の家族はとても仲が良いです。',
     chinesePinyin: 'wǒ de jiā rén hěn tuán jié',
     japaneseRomaji: 'watashi no kazoku wa totemo nakaga ii desu',
-    tip: 'Relación familiar y expresiones de cariño.'
+    tip: 'Muy útil para hablar de tus seres queridos.',
+    emoji: '👨‍👩‍👧‍👦'
   },
   {
     id: 'familia-2',
@@ -95,7 +102,8 @@ export const phrases = [
     japanese: '両親は私をとても支えてくれます。',
     chinesePinyin: 'wǒ de fù mǔ fēi cháng zhī chí wǒ',
     japaneseRomaji: 'ryōshin wa watashi o totemo sasaete kuremasu',
-    tip: 'Muy útil para hablar de la vida diaria y relaciones.'
+    tip: 'Expresión natural para hablar de apoyo emocional.',
+    emoji: '💛'
   },
   {
     id: 'trabajo-1',
@@ -107,7 +115,8 @@ export const phrases = [
     japanese: '重要なプロジェクトに取り組んでいます。',
     chinesePinyin: 'wǒ zài zuò yí gè zhòng yào de xiàng mù',
     japaneseRomaji: 'jūyō na purojekuto ni torikunde imasu',
-    tip: 'Excelente para conversaciones profesionales.'
+    tip: 'Excelente para conversaciones profesionales.',
+    emoji: '💼'
   },
   {
     id: 'trabajo-2',
@@ -119,7 +128,34 @@ export const phrases = [
     japanese: 'チームのコミュニケーションを改善する必要があります。',
     chinesePinyin: 'wǒ men xū yào gǎi shàn tuán duì gōu tōng',
     japaneseRomaji: 'chīmu no komyunikēshon o kaizen suru hitsuyō ga arimasu',
-    tip: 'Útil para hablar de coordinación laboral y colaboración.'
+    tip: 'Útil para hablar de colaboración en equipos.',
+    emoji: '🤝'
+  },
+  {
+    id: 'vida-1',
+    category: 'Vida diaria',
+    level: 'A1',
+    spanish: 'Hoy tengo mucho que hacer.',
+    english: 'Today I have a lot to do.',
+    chinese: '今天我有很多事情要做。',
+    japanese: '今日はやることがたくさんあります。',
+    chinesePinyin: 'jīn tiān wǒ yǒu hěn duō shì qíng yào zuò',
+    japaneseRomaji: 'kyō wa yaru koto ga takusan arimasu',
+    tip: 'Muy útil para describir tu rutina diaria.',
+    emoji: '📅'
+  },
+  {
+    id: 'vida-2',
+    category: 'Vida diaria',
+    level: 'A2',
+    spanish: 'Me gusta descansar y leer un rato.',
+    english: 'I like to relax and read for a while.',
+    chinese: '我喜欢休息一下并读一会儿书。',
+    japanese: 'リラックスして少し本を読むのが好きです。',
+    chinesePinyin: 'wǒ xǐ huān xiū xí yí xià bìng dú yī huì er shū',
+    japaneseRomaji: 'rirakkusu shite sukoshi hon o yomu no ga suki desu',
+    tip: 'Perfecto para hablar de hábitos y bienestar.',
+    emoji: '📖'
   }
 ];
 
@@ -129,7 +165,9 @@ export const vocabulary = [
   { es: 'tiempo', en: 'time', zh: '时间', ja: '時間' },
   { es: 'casa', en: 'house', zh: '家', ja: '家' },
   { es: 'comida', en: 'food', zh: '食物', ja: '食べ物' },
-  { es: 'aprender', en: 'to learn', zh: '学习', ja: '学ぶ' }
+  { es: 'aprender', en: 'to learn', zh: '学习', ja: '学ぶ' },
+  { es: 'sonrisa', en: 'smile', zh: '微笑', ja: '笑顔' },
+  { es: 'camino', en: 'path', zh: '道路', ja: '道' }
 ];
 
 export const lessonCards = [
@@ -143,7 +181,7 @@ export const lessonCards = [
     tag: 'Semana 2',
     title: 'Viajes y direcciones',
     description: 'Aprende a pedir ayuda, preguntar por lugares y moverte con seguridad.',
-    points: ['Dónde está', 'Reservar', 'Mochila y transporte']
+    points: ['Dónde está', 'Reservar', 'Transporte']
   },
   {
     tag: 'Semana 3',
